@@ -2,8 +2,61 @@
 
 <!-- Step 1: List all transactions, starting with the ICO -->
 
+<ol>
+    <% transactions = Transaction.all %>
+
+    <% for transaction in transactions %>
+        <% from_user = User.find_by({ "id" => transaction["from_user_id"] })["name"]%>
+        <% to_user = User.find_by({ "id" => transaction["to_user_id"] })["name"] %>
+        <li>
+            From: <%= from_user %>
+            - To: <%= to_user %>
+            - Amount: <%= transaction["amount"] %>
+        </li>
+    <% end %>
+</ol>
+
 <!-- Step 2: Calculate and display the balances -->
 
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Balance</th>
+  </tr>
+
+    <% users = User.all
+       transactions = Transaction.all %>
+
+        <% for user in users %>
+            <% balance = 0 %>
+            <% for transaction in transactions %>
+                <% if transaction["from_user_id"] == user["id"]
+                    balance = balance - transaction["amount"]
+                    elsif transaction["to_user_id"] == user["id"]
+                    balance = balance + transaction["amount"]
+                    end %>
+            <% end %>
+            <tr>
+            <td><%=user["name"]%></td>
+            <td><%=balance%> KC</td>
+            </tr>
+        <% end %>
+</table>
+<p></p>
+    <% users = User.all
+       transactions = Transaction.all %>
+
+        <% for user in users %>
+            <% balance = 0 %>
+            <% for transaction in transactions %>
+                <% if transaction["from_user_id"] == user["id"]
+                    balance = balance - transaction["amount"]
+                    elsif transaction["to_user_id"] == user["id"]
+                    balance = balance + transaction["amount"]
+                    end %>
+            <% end %>
+            <li> Balance for <%=user["name"]%>: <%=balance%> KC</li>
+        <% end %>
 <!-- 
 Expected balances:
 Balance for Brian: 1348 KC
